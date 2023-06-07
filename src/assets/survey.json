@@ -1,0 +1,45 @@
+{
+    
+    "information": {
+        "name": "My Survey",
+        "introduction": "xxx"
+    },
+
+    "evocations": {
+        "inputs": 5
+    },
+
+    "items": [
+
+        {   "var": "edad", 
+            "type": "numeric",
+            "question": "¿Cuál es tu edad?",
+            "validators": [
+                { "name": "required"},
+                { "name": "min", "value": 18},
+                { "name": "max", "value": 99}
+              ],
+            "invalid_text": "Por favor, ingresá una edad válida 18-99."
+        },
+        
+        {   "var": "genero",
+            "type": "multiple",
+            "options": ["Masculino", "Femenino", "Otro", "Prefiero no decirlo"],
+            "question": "¿Cuál es tu genero?",
+            "validators": [
+                { "name": "required" }
+            ],
+            "invalid_text": "Este campo es obligatorio"
+        },
+        
+        {   "var": "estudios",
+            "type": "multiple",
+            "options": ["Primario", "Secundario", "Terciario", "Universitario", "Posgrado"],
+            "question": "¿Cuál es tu nivel de estudios?" },
+        
+        {   "var": "comentario",
+            "type": "text",
+            "placeholder": "¿Querés agregar algún comentario?" }
+    ]
+
+}
