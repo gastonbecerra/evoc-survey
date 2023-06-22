@@ -19,6 +19,7 @@
                 { "name": "min", "value": 18},
                 { "name": "max", "value": 99}
               ],
+            "default_value": 1,
             "invalid_text": "Por favor, ingresá una edad válida 18-99."
         },
         
@@ -35,7 +36,12 @@
         {   "var": "estudios",
             "type": "multiple",
             "options": ["Primario", "Secundario", "Terciario", "Universitario", "Posgrado"],
-            "question": "¿Cuál es tu nivel de estudios?" },
+            "question": "¿Cuál es tu nivel de estudios?",
+            "validators": [
+                { "name": "required" }
+            ],
+            "invalid_text": "Este campo es obligatorio"
+         },
         
         {   "var": "comentario",
             "type": "text",

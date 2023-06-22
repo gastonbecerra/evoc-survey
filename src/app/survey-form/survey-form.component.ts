@@ -15,6 +15,7 @@ interface SurveyItem {
   validators?: Validator[];
   invalid_text?: string; 
   placeholder?: string;
+  default_value?: any;
 }
 
 interface SurveyData {
@@ -53,7 +54,6 @@ export class SurveyFormComponent implements OnInit {
       }
     );
   }
-
   createForm(): void {
     const formControls: { [key: string]: any } = {};
   
@@ -81,22 +81,29 @@ export class SurveyFormComponent implements OnInit {
         errorMessage = item.invalid_text;
       }
   
-      formControls[item.var] = ['', validators];
+      const defaultValue = item.default_value;
+      formControls[item.var] = [defaultValue || '', validators];
       formControls[item.var].errorMessage = errorMessage; // Assign error message to the form control
+  
+      if (defaultValue !== undefined) {
+        this.surveyForm.get(item.var)?.updateValueAndValidity();
+      }
     });
   
     this.surveyForm = this.formBuilder.group(formControls);
   }
   
-  
   onSubmit(): void {
-    if (this.surveyForm.valid) {
-      console.log(this.surveyForm.value);
-    } else {
-      console.log('Invalid form');
-      console.log(this.surveyForm.errors); // Log the form errors
-      console.log(this.surveyForm.controls); // Log the form controls
-    }
+  if (this.surveyForm.valid) {
+    console.log(this.surveyForm.value);
+  } else {
+    console.log('Invalid form');
+    Object.keys(this.surveyForm.controls).forEach((key) => {
+      const controlErrors = this.surveyForm.get(key)?.errors;
+      console.log('Control:', key);
+      console.log('Errors:', controlErrors);
+    });
   }
+}
 
 }
