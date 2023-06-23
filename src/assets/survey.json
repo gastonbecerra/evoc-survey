@@ -5,13 +5,10 @@
         "introduction": "xxx"
     },
 
-    "evocations": {
-        "inputs": 5
-    },
-
     "items": [
 
-        {   "var": "edad", 
+        {
+            "var": "edad", 
             "type": "numeric",
             "question": "¿Cuál es tu edad?",
             "validators": [
@@ -19,11 +16,12 @@
                 { "name": "min", "value": 18},
                 { "name": "max", "value": 99}
               ],
-            "default_value": 1,
+            "default_value": 20,
             "invalid_text": "Por favor, ingresá una edad válida 18-99."
         },
         
-        {   "var": "genero",
+        {   
+            "var": "genero",
             "type": "multiple",
             "options": ["Masculino", "Femenino", "Otro", "Prefiero no decirlo"],
             "question": "¿Cuál es tu genero?",
@@ -33,7 +31,8 @@
             "invalid_text": "Este campo es obligatorio"
         },
         
-        {   "var": "estudios",
+        {   
+            "var": "estudios",
             "type": "multiple",
             "options": ["Primario", "Secundario", "Terciario", "Universitario", "Posgrado"],
             "question": "¿Cuál es tu nivel de estudios?",
@@ -41,11 +40,52 @@
                 { "name": "required" }
             ],
             "invalid_text": "Este campo es obligatorio"
-         },
+        },
         
-        {   "var": "comentario",
+        {   
+            "var": "comentario",
             "type": "text",
-            "placeholder": "¿Querés agregar algún comentario?" }
+            "placeholder": "¿Querés agregar algún comentario?" 
+        },
+
+        {
+            "var": "asociaciones_bigdata",
+            "type": "evocation",
+            "question": "¿Qué se te viene a la mente cuando pensás en Big data?",
+            "min_items": 5
+        },
+
+        {
+            "var": "neopir",
+            "type": "scale",
+            "question": "Por favor, indicá en grado de acuerdo las siguientes afirmaciones",
+            "scale": [
+                { "text": "Totalmente en desacuerdo", "value": 1 },
+                { "text": "Mayormente en desacuerdo", "value": 2 },
+                { "text": "ni de acuerdo ni desacuerdo", "value": 3 },
+                { "text": "Mayormente de acuerdo", "value": 4 },
+                { "text": "Totalmente de acuerdo", "value": 5 }
+            ],
+            "sentences": [
+                { "id":  "neopir1",
+                  "text": "Soy el alma de la fiesta", 
+                  "meta": {
+                    "inverse": false , 
+                    "dimension": "extroversion"}
+                },
+                { "id":  "neopir2",
+                  "text": "Creo que no valgo una bosta", 
+                  "meta": {
+                    "inverse": true , 
+                    "dimension": "extroversion"}
+                }
+            ]
+        }
+
+
+
+
+
     ]
 
 }

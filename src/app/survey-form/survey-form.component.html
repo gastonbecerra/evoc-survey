@@ -4,6 +4,7 @@
   
       <div *ngFor="let item of surveyData.items">
         <div [ngSwitch]="item.type">
+
           <div *ngSwitchCase="'numeric'">
             <label>{{ item.question }}</label>
             <input type="number" [formControlName]="item.var" />
@@ -11,6 +12,7 @@
               {{ item.invalid_text }}
             </div>
           </div>
+
           <div *ngSwitchCase="'multiple'">
             <label>{{ item.question }}</label>
             <select [formControlName]="item.var">
@@ -20,6 +22,7 @@
               {{ item.invalid_text }}
             </div>
           </div>
+
           <div *ngSwitchCase="'text'">
             <label>{{ item.question }}</label>
             <textarea [formControlName]="item.var" [placeholder]="item.placeholder"></textarea>
@@ -27,6 +30,39 @@
               {{ item.invalid_text }}
             </div>
           </div>
+
+          <div *ngSwitchCase="'evocation'">
+            <label>{{ item.question }}</label>           
+            <!-- 2do -->
+            <div *ngIf="surveyForm.get(item.var)?.invalid">
+              {{ item.invalid_text }}
+            </div>
+          </div>
+
+          <div *ngSwitchCase="'scale'">
+            <label>{{ item.question }}</label>
+
+
+            <div *ngSwitchCase="'scale'">
+              <label>{{ item.question }}</label>
+              <div *ngFor="let sentence of item.sentences">
+                <p>{{ sentence.text }}</p>
+                <div *ngFor="let option of item.scale">
+                  <input type="radio" 
+                    [name]="sentence.id"
+                    [value]="option.value"
+                    (change)="updateScaleValue(item.var, sentence.id, option.value)"
+                    >
+                  <label>{{ option.text }}</label>
+                </div>
+              </div>
+              <div *ngIf="surveyForm.get(item.var)?.invalid && surveyForm.get(item.var)?.dirty">
+                {{ item.invalid_text }}
+              </div>
+            </div>
+
+          </div>
+
         </div>
       </div>
   

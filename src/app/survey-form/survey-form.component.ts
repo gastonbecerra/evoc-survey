@@ -16,6 +16,8 @@ interface SurveyItem {
   invalid_text?: string; 
   placeholder?: string;
   default_value?: any;
+  scale?: ScaleOption[];
+  sentences?: Sentence[];
 }
 
 interface SurveyData {
@@ -24,6 +26,20 @@ interface SurveyData {
     introduction: string;
   };
   items: SurveyItem[];
+}
+
+interface ScaleOption {
+  text: string;
+  value: number;
+}
+
+interface Sentence {
+  text: string;
+  id: string;
+  // meta: {
+  //   inverse: boolean;
+  //   dimension: string;
+  // };
 }
 
 @Component({
@@ -54,6 +70,18 @@ export class SurveyFormComponent implements OnInit {
       }
     );
   }
+  updateScaleValue(itemVar: string, sentenceId: string, optionValue: number): void {
+    const scaleValues = this.surveyForm.get(itemVar)?.value || {};
+  
+    scaleValues[sentenceId] = optionValue;
+  
+    this.surveyForm.patchValue({ [itemVar]: scaleValues });
+
+    console.log(this.surveyForm.value);
+
+  }
+  
+
   createForm(): void {
     const formControls: { [key: string]: any } = {};
   
@@ -91,8 +119,8 @@ export class SurveyFormComponent implements OnInit {
     });
   
     this.surveyForm = this.formBuilder.group(formControls);
-  }
-  
+  }  
+
   onSubmit(): void {
   if (this.surveyForm.valid) {
     console.log(this.surveyForm.value);
