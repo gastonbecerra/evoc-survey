@@ -1,6 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators, ValidatorFn } from '@angular/forms';
 import { SurveyService } from '../survey.service';
+import { FormArray } from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
+
 
 interface Validator {
   name: string;
@@ -18,6 +22,8 @@ interface SurveyItem {
   default_value?: any;
   scale?: ScaleOption[];
   sentences?: Sentence[];
+  //evocation?: EvocationItem;
+  min_items?: number;
 }
 
 interface SurveyData {
@@ -40,6 +46,7 @@ interface Sentence {
   //   inverse: boolean;
   //   dimension: string;
   // };
+  // **2do: poder incluir meta, o al menos, transferirla a la base
 }
 
 @Component({
@@ -47,6 +54,7 @@ interface Sentence {
   templateUrl: './survey-form.component.html',
   styleUrls: ['./survey-form.component.css']
 })
+
 export class SurveyFormComponent implements OnInit {
   surveyForm: FormGroup = new FormGroup({});
   surveyData!: SurveyData;
@@ -57,6 +65,29 @@ export class SurveyFormComponent implements OnInit {
   ) {
     this.surveyForm = this.formBuilder.group({});
   }
+
+  getRange(n: number): number[] {
+    return Array.from({ length: n }, (_, i) => i);
+  }
+  
+  additionalWords: number = 0;
+  addInput(item: SurveyItem): void {
+    const formArray = this.surveyForm.get(item.var) as FormArray;
+    formArray.push(new FormControl(''));
+    this.additionalWords++;
+    console.log('addInput');
+  }
+    
+  getEvocationControls(item: SurveyItem): FormControl[] {
+    const formArray = this.surveyForm.get(item.var) as FormArray;
+    return formArray.controls as FormControl[];
+  }
+  
+  getEvocationControl(item: SurveyItem, index: number): FormControl {
+    const control = this.surveyForm.get(item.var) as FormArray;
+    return control.at(index) as FormControl;
+  }
+  
 
   ngOnInit(): void {
     this.surveyService.getSurveyData().subscribe(
@@ -70,17 +101,12 @@ export class SurveyFormComponent implements OnInit {
       }
     );
   }
+  
   updateScaleValue(itemVar: string, sentenceId: string, optionValue: number): void {
     const scaleValues = this.surveyForm.get(itemVar)?.value || {};
-  
-    scaleValues[sentenceId] = optionValue;
-  
+    scaleValues[sentenceId] = optionValue;  
     this.surveyForm.patchValue({ [itemVar]: scaleValues });
-
-    console.log(this.surveyForm.value);
-
   }
-  
 
   createForm(): void {
     const formControls: { [key: string]: any } = {};
@@ -89,6 +115,7 @@ export class SurveyFormComponent implements OnInit {
       const validators: ValidatorFn[] = [];
       let errorMessage: string | undefined;
   
+      // Construir los validadores para el campo actual
       if (item.validators) {
         item.validators.forEach((validator) => {
           if (validator.name === 'required') {
@@ -103,23 +130,38 @@ export class SurveyFormComponent implements OnInit {
             }
           }
         });
-      }
   
-      if (item.invalid_text) {
-        errorMessage = item.invalid_text;
+        // Asignar el mensaje de error personalizado si está definido
+        if (item.invalid_text) {
+          errorMessage = item.invalid_text;
+        }
       }
+       
+      if (item.type === 'evocation' && item.min_items !== undefined) {
+        const formArray = this.formBuilder.array([]);
+        for (let i = 0; i < item.min_items; i++) {
+          formArray.push(this.formBuilder.control(''));
+        }
+        formControls[item.var] = formArray;
+
+      } else {
+
+        // Definir el valor por defecto del campo
+        const defaultValue = item.default_value;
+        formControls[item.var] = [defaultValue || '', validators];
   
-      const defaultValue = item.default_value;
-      formControls[item.var] = [defaultValue || '', validators];
-      formControls[item.var].errorMessage = errorMessage; // Assign error message to the form control
-  
-      if (defaultValue !== undefined) {
-        this.surveyForm.get(item.var)?.updateValueAndValidity();
+        // Actualizar el estado y validez del campo si tiene un valor por defecto
+        if (defaultValue !== undefined) {
+          this.surveyForm.get(item.var)?.updateValueAndValidity();
+        }
       }
+
     });
   
+    // Crear el grupo de formularios utilizando los controles definidos
     this.surveyForm = this.formBuilder.group(formControls);
-  }  
+  }
+  
 
   onSubmit(): void {
   if (this.surveyForm.valid) {
