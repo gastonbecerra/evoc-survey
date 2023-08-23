@@ -1,11 +1,54 @@
 {
     
     "information": {
-        "name": "My Survey",
-        "introduction": "xxx"
+        "name": "Encuesta sobre Inteligencia Artificial",
+        "introduction": "Estamos realizando una breve encuesta sobre inteligencia artificial. Esta encuesta está dirigida a residentes de Argentina, de 18 años o más.",
+        "mail": "gaston.becerra@uflouniversidad.edu.ar",
+        "team": "Equipo de investigación sobre psicología social de la Tecnología. Universidad de Buenos Aires y Universidad de Flores",
+        "logo": "https://upload.wikimedia.org/wikipedia/commons/1/14/Logo_de_la_Universidad_de_Buenos_Aires.jpg"
     },
 
     "items": [
+
+        {
+            "var": "asociaciones_bigdata",
+            "type": "evocation",
+            "question": "¿Qué se te viene a la mente cuando pensás en Big data?",
+            "weighted": true,
+            "min_items": 5,
+            "validators": [
+                { "name": "required" }
+            ],
+            "placeholder": "ingresa una palabra",
+            "invalid_text": "Es obligatorio introducir al menos 5 palabras"
+        },
+
+        {
+            "var": "neopir",
+            "type": "scale",
+            "question": "Por favor, indicá en grado de acuerdo las siguientes afirmaciones",
+            "scale": [
+                { "text": "Totalmente en desacuerdo", "value": 1 },
+                { "text": "Mayormente en desacuerdo", "value": 2 },
+                { "text": "Ni de acuerdo ni desacuerdo", "value": 3 },
+                { "text": "Mayormente de acuerdo", "value": 4 },
+                { "text": "Totalmente de acuerdo", "value": 5 }
+            ],
+            "sentences": [
+                { "id":  "neopir1",
+                  "text": "Soy el alma de la fiesta", 
+                  "meta": {
+                    "inverse": false , 
+                    "dimension": "extroversion"}
+                },
+                { "id":  "neopir2",
+                  "text": "Creo que no valgo una bosta", 
+                  "meta": {
+                    "inverse": true , 
+                    "dimension": "extroversion"}
+                }
+            ]
+        },
 
         {
             "var": "edad", 
@@ -46,51 +89,7 @@
             "var": "comentario",
             "type": "text",
             "placeholder": "¿Querés agregar algún comentario?" 
-        },
-
-        {
-            "var": "asociaciones_bigdata",
-            "type": "evocation",
-            "question": "¿Qué se te viene a la mente cuando pensás en Big data?",
-            "min_items": 5,
-            "validators": [
-                { "name": "required" }
-            ],
-            "placeholder": "ingresa una palabra",
-            "invalid_text": "Es obligatorio introducir al menos 5 palabras"
-        },
-
-        {
-            "var": "neopir",
-            "type": "scale",
-            "question": "Por favor, indicá en grado de acuerdo las siguientes afirmaciones",
-            "scale": [
-                { "text": "Totalmente en desacuerdo", "value": 1 },
-                { "text": "Mayormente en desacuerdo", "value": 2 },
-                { "text": "Ni de acuerdo ni desacuerdo", "value": 3 },
-                { "text": "Mayormente de acuerdo", "value": 4 },
-                { "text": "Totalmente de acuerdo", "value": 5 }
-            ],
-            "sentences": [
-                { "id":  "neopir1",
-                  "text": "Soy el alma de la fiesta", 
-                  "meta": {
-                    "inverse": false , 
-                    "dimension": "extroversion"}
-                },
-                { "id":  "neopir2",
-                  "text": "Creo que no valgo una bosta", 
-                  "meta": {
-                    "inverse": true , 
-                    "dimension": "extroversion"}
-                }
-            ]
         }
 
-
-
-
-
     ]
-
 }

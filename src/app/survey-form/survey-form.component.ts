@@ -5,7 +5,6 @@ import { FormArray } from '@angular/forms';
 import { FormControl } from '@angular/forms';
 import { AbstractControl } from '@angular/forms';
 
-
 interface Validator {
   name: string;
   value?: number;
@@ -30,6 +29,9 @@ interface SurveyData {
   information: {
     name: string;
     introduction: string;
+    logo: string;
+    team: string;
+    mail: string;
   };
   items: SurveyItem[];
 }
@@ -77,17 +79,11 @@ export class SurveyFormComponent implements OnInit {
     this.additionalWords++;
     console.log('addInput');
   }
-    
-  getEvocationControls(item: SurveyItem): FormControl[] {
-    const formArray = this.surveyForm.get(item.var) as FormArray;
-    return formArray.controls as FormControl[];
-  }
-  
+      
   getEvocationControl(item: SurveyItem, index: number): FormControl {
     const control = this.surveyForm.get(item.var) as FormArray;
     return control.at(index) as FormControl;
   }
-  
 
   ngOnInit(): void {
     this.surveyService.getSurveyData().subscribe(
@@ -161,7 +157,6 @@ export class SurveyFormComponent implements OnInit {
     // Crear el grupo de formularios utilizando los controles definidos
     this.surveyForm = this.formBuilder.group(formControls);
   }
-  
 
   onSubmit(): void {
   if (this.surveyForm.valid) {

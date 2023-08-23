@@ -1,6 +1,25 @@
 <div *ngIf="surveyData">
     <form [formGroup]="surveyForm" (ngSubmit)="onSubmit()">
       <h2>{{ surveyData.information.name }}</h2>
+      <p>{{ surveyData.information.introduction }}</p>
+      <p>&nbsp;</p>
+      <img src="{{surveyData.information.logo}}" *ngIf="surveyData.information.logo" class="logo">
+      <p>{{ surveyData.information.team }}</p>
+      <p>Puede dirigir sus consultas a {{ surveyData.information.mail }}</p>
+      <p>&nbsp;</p>
+
+      <div>
+        <h3>Consentimiento informado</h3>
+        <p>Esta encuesta persigue objetivos puramente académicos. Tu participación en esta encuesta no te perjudicará de ningún modo.</p>
+        <p>El diseño de esta encuesta tiene en consideración los siguientes derechos de quien responde:</p>
+        <ul>
+          <li>Anonimato: No se solicitan tus nombres y apellidos; sólo nos interesa buscar tendencias en las respuestas del conjunto de participantes. </li>
+          <li>Cofidencialidad: Toda la información que brindes será confidencial y se utilizará única y exclusivamente para fines académicos, que incluyen publicación de resultados, sin revelar tu identidad.</li>
+          <li>Respeto e integridad: Tus respuestas no serán juzgadas. Nos interesa tomar en cuenta tu criterio y tu pensamiento libre. </li>
+          <li>Voluntariedad: Si no deseas participar, ello no será cuestionado de ningún modo.</li>
+        </ul>
+        <p>Si tenes consultas o dudas metodológicas, nos podés escribir a {{ surveyData.information.mail }}</p>
+      </div>
   
       <div *ngFor="let item of surveyData.items">
         <div [ngSwitch]="item.type">
@@ -37,16 +56,14 @@
             {{item.min_items}}
             {{additionalWords}}
             <div *ngFor="let i of getRange((item.min_items || 0) + (additionalWords || 0))">
-              <input [formControl]="getEvocationControl(item, i)" [placeholder]="item.placeholder">
+              <input [formControl]="getEvocationControl(item, i)" 
+              [placeholder]="item.placeholder">
             </div>
-            <button (click)="addInput(item)" type="button" name="addButton">Agregar palabra</button>
-          
+            <button (click)="addInput(item)" type="button" name="addButton">Agregar palabra</button>          
             <div *ngIf="surveyForm.get(item.var)?.invalid">
               {{ item.invalid_text }}
             </div>
-          </div>
-          
-          
+          </div>       
           
           <div *ngSwitchCase="'scale'">
             <label>{{ item.question }}</label>
