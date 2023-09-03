@@ -12,9 +12,10 @@
 
         {
             "var": "asociaciones_bigdata",
+            "var2": "asociaciones_bigdata_rating",
             "type": "evocation",
             "question": "¿Qué se te viene a la mente cuando pensás en Big data?",
-            "weighted": true,
+            "weighted": true, 
             "min_items": 5,
             "validators": [
                 { "name": "required" }

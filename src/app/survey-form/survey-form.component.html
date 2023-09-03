@@ -55,11 +55,18 @@
             <label>{{ item.question }}</label>
             {{item.min_items}}
             {{additionalWords}}
-            <div *ngFor="let i of getRange((item.min_items || 0) + (additionalWords || 0))">
+
+            <div *ngFor="let i of getRange((item.min_items || 0) + (additionalWords || 0));
+              let idx = index">
               <input [formControl]="getEvocationControl(item, i)" 
-              [placeholder]="item.placeholder">
+                [placeholder]="item.placeholder">
+              <input *ngIf="item.weighted" type="number" 
+                  [formControl]="getRatingControl(item, i)" 
+                  min="1" max="10">
             </div>
+
             <button (click)="addInput(item)" type="button" name="addButton">Agregar palabra</button>          
+
             <div *ngIf="surveyForm.get(item.var)?.invalid">
               {{ item.invalid_text }}
             </div>

@@ -12,6 +12,7 @@ interface Validator {
 
 interface SurveyItem {
   var: string;
+  var2: string;
   type: string;
   question: string;
   options?: string[];
@@ -23,6 +24,8 @@ interface SurveyItem {
   sentences?: Sentence[];
   //evocation?: EvocationItem;
   min_items?: number;
+  weighted?: boolean;
+  rating?: number;
 }
 
 interface SurveyData {
@@ -76,6 +79,8 @@ export class SurveyFormComponent implements OnInit {
   addInput(item: SurveyItem): void {
     const formArray = this.surveyForm.get(item.var) as FormArray;
     formArray.push(new FormControl(''));
+    const controlArray = this.surveyForm.get(item.var2) as FormArray;
+    controlArray.push(new FormControl(''));
     this.additionalWords++;
     console.log('addInput');
   }
@@ -83,6 +88,16 @@ export class SurveyFormComponent implements OnInit {
   getEvocationControl(item: SurveyItem, index: number): FormControl {
     const control = this.surveyForm.get(item.var) as FormArray;
     return control.at(index) as FormControl;
+  }
+
+  getRatingControl(item: SurveyItem, index: number): FormControl {
+    const controlArray = this.surveyForm.get(item.var2) as FormArray | null;
+    if (controlArray) {
+        const control = controlArray.at(index) as FormControl;
+        return control;
+    }    
+    // Si no se encuentra el control, devolver un FormControl vacío
+    return new FormControl();
   }
 
   ngOnInit(): void {
@@ -135,10 +150,16 @@ export class SurveyFormComponent implements OnInit {
        
       if (item.type === 'evocation' && item.min_items !== undefined) {
         const formArray = this.formBuilder.array([]);
+        const ratingArray = this.formBuilder.array([]);
+        const ratingControl = this.formBuilder.control(5);
+        ratingControl.setValidators([Validators.min(1), Validators.max(10)]);
+
         for (let i = 0; i < item.min_items; i++) {
           formArray.push(this.formBuilder.control(''));
+          if (item.weighted) { ratingArray.push(ratingControl); }
         }
         formControls[item.var] = formArray;
+        if (item.weighted) { formControls[item.var2] = ratingArray; }
 
       } else {
 
